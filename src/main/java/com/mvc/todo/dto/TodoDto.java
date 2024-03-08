@@ -14,16 +14,12 @@ public class TodoDto {
     private Long id;
     private String title;
     private boolean completed;
-    private LocalDate createdDate;
-    private LocalDate endDate;
 
     public static Todo toEntity(TodoDto response) {
         return Todo.builder()
                 .id(response.id)
                 .title(response.title)
                 .completed(response.completed)
-                .createdDate(response.createdDate)
-                .endDate(response.endDate)
                 .build();
     }
 
@@ -32,8 +28,6 @@ public class TodoDto {
                 .id(entity.getId())
                 .title(entity.getTitle())
                 .completed(entity.isCompleted())
-                .createdDate(entity.getCreatedDate())
-                .endDate(entity.getCreatedDate())
                 .build();
     }
 }

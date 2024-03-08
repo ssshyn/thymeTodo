@@ -23,4 +23,17 @@ public class TodoServiceImpl implements TodoService{
     public List<TodoDto> getTodoList() {
         return todoRepository.findAll().stream().map(TodoDto::fromEntity).toList();
     }
+
+    @Override
+    public void completeTodo(Long id) {
+        TodoDto updateTodo = todoRepository.findById(id).map(TodoDto::fromEntity).orElseThrow();
+        updateTodo.setCompleted(!updateTodo.isCompleted());
+
+        todoRepository.save(TodoDto.toEntity(updateTodo));
+    }
+
+    @Override
+    public void deleteTodo(Long id) {
+        todoRepository.deleteById(id);
+    }
 }

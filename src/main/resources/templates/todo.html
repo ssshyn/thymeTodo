@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>TodoList</title>
+</head>
+<body>
+<form th:action="@{/todo}" method="post" th:object="${todoDto}"
+      enctype="application/x-www-form-urlencoded;chartset=UTF-8">
+    <h1>TODO LIST</h1>
+    <label for="todo-desc">새 할일: <input type="text" th:field="*{title}" id="todo-desc" name="todo-desc"></label>
+    <input type="submit" value="생성">
+</form>
+
+<hr>
+<b style="font-size: 18px">ToDo</b>
+<div th:each="todo: ${todoList}">
+    <div th:if="${todo.completed} == false">
+        <span>[[${todo.title}]]</span><br>
+        <div>
+            <form th:action="@{/todo/{id}/update (id=${todo.id})}" method="post" style="display:inline-block;">
+                <input type="submit" value="완료">
+            </form>
+            <form th:action="@{/todo/{id}/delete (id=${todo.id})}" method="post" style="display:inline-block;">
+                <input type="submit" value="삭제">
+            </form>
+        </div>
+    </div>
+</div>
+<hr>
+<b style="font-size: 18px">Done</b>
+<div th:each="todo: ${todoList}">
+    <div th:if="${todo.completed} == true">
+        <span>[[${todo.title}]]</span> <br>
+        <div>
+            <form th:action="@{/todo/{id}/update (id=${todo.id})}" method="post" style="display:inline-block;">
+                <input type="submit" value="취소">
+            </form>
+            <form th:action="@{/todo/{id}/delete (id=${todo.id})}" method="post" style="display:inline-block;">
+                <input type="submit" value="삭제">
+            </form>
+        </div>
+    </div>
+</div>
+
+
+</body>
+</html>

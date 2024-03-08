@@ -4,10 +4,8 @@ import com.mvc.todo.dto.TodoDto;
 import com.mvc.todo.service.TodoService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -18,12 +16,33 @@ public class TodoController {
     private final TodoService todoService;
 
     @GetMapping
-    public List<TodoDto> getTodoList() {
-        return todoService.getTodoList();
+    public String getTodoList(Model model) {
+        model.addAttribute("todoDto", new TodoDto());
+        model.addAttribute("todoList", todoService.getTodoList());
+        return "todo";
     }
 
     @PostMapping
-    public Long saveTodo(@RequestBody TodoDto todoDto) {
-        return todoService.saveTodo(todoDto);
+    public String saveTodo(@ModelAttribute(value = "todoDto") TodoDto todoDto, Model model) {
+        todoService.saveTodo(todoDto);
+        model.addAttribute("todoDto", new TodoDto());
+        model.addAttribute("todoList", todoService.getTodoList());
+        return "todo";
+    }
+
+    @PostMapping("/{id}/update")
+    public String updateTodo(@PathVariable(value = "id") Long id, Model model) {
+        todoService.completeTodo(id);
+        model.addAttribute("todoDto", new TodoDto());
+        model.addAttribute("todoList", todoService.getTodoList());
+        return "todo";
+    }
+
+    @PostMapping("/{id}/delete")
+    public String deleteTodo(@PathVariable(value = "id") Long id, Model model) {
+        todoService.deleteTodo(id);
+        model.addAttribute("todoDto", new TodoDto());
+        model.addAttribute("todoList", todoService.getTodoList());
+        return "todo";
     }
 }
